@@ -4,7 +4,11 @@ class BirdStore {
   @observable birds = []
 
   @action addBird = (bird) => {
-    this.birds.push(bird)
+    const obj = {
+      name:bird,
+      time:new Date()
+    }
+    this.birds.push(obj)
   }
 
   @action delBird = (index) => {

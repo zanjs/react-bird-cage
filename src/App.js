@@ -1,18 +1,47 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {inject,observer} from 'mobx-react';
 
+@inject('BirdStore')
+@observer
 class App extends Component {
+  handleSubmit = (e) => {
+    e.preventDefault()
+    const bird = this.bird.value
+    if(!bird){
+      return
+    }
+    this.props.BirdStore.addBird(bird)
+    this.bird.value = ''
+  }
+
+  handleDel = (index) => {
+    console.log(index)
+    this.props.BirdStore.delBird(index)
+  }
+
   render() {
+    const {BirdStore} = this.props
+
     return (
       <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
-        </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+        <h5 className="">
+          You have {BirdStore.count} birds.
+        </h5>
+        <form onSubmit={e => this.handleSubmit(e)}>
+          <input type="text" ref={input => this.bird = input}/>
+          <button>
+            add bird
+          </button>
+        </form>
+
+        <ul>
+          {BirdStore.birds.map((bird, index) => (
+            <li key={bird + index}>
+            {bird}
+            <button onClick={e => this.handleDel(index)}> del </button>
+            </li>
+          ))}
+        </ul>
       </div>
     );
   }

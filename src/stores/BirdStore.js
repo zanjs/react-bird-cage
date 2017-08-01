@@ -7,7 +7,11 @@ class BirdStore {
     this.birds.push(bird)
   }
 
-  @computed get birdsCount() {
+  @action delBird = (index) => {
+    this.birds.splice(index, 1)
+  }
+
+  @computed get count() {
     return this.birds.length
   }
 }

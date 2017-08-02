@@ -1,66 +1,38 @@
-import React, { Component } from 'react';
-import {inject,observer} from 'mobx-react';
+import React from 'react'
+// import {createHashHistory} from 'history'
 import {
+  // BrowserRouter as Router,
   HashRouter,
   Route,
-} from 'react-router-dom';
+  Switch,
+  NavLink
+} from 'react-router-dom'
 
+import {routes, RouteWithSubRoutes} from './routes/'
+import NotFound from './components/notFound'
+import RoutePath from './routes/path'
 
-import About from './components/about'
-import Birds from './components/birds'
+// const hashHistory = createHashHistory()
+// <HashRouter history={hashHistory}  >
 
+const App = () => (
+  <HashRouter >
+    <div>
+      <ul>
+        <li><NavLink strict to={RoutePath.birds} activeClassName="active">birds</NavLink></li>
+        <li><NavLink strict to={RoutePath.count} activeClassName="active">count</NavLink></li>
+        <li><NavLink strict to={RoutePath.histtory} activeClassName="active">history</NavLink></li>
+        <li><NavLink strict to="/tacos" activeClassName="active">Tacos</NavLink></li>
+        <li><NavLink strict to="/404" activeClassName="active">404</NavLink></li>
+      </ul>
+      <Switch>
+      {routes.map((route, i) => (
+        <RouteWithSubRoutes key={i} {...route}/>
+      ))}
+      <Route component={NotFound}/>
+      </Switch>
+    </div>
+  </HashRouter>
+)
 
-@inject('BirdStore')
-@observer
-class App extends Component {
-  handleSubmit = (e) => {
-    e.preventDefault()
-    const bird = this.bird.value
-    if(!bird){
-      return
-    }
-    this.props.BirdStore.addBird(bird)
-    this.bird.value = ''
-  }
-
-  handleDel = (index) => {
-    console.log(index)
-    this.props.BirdStore.delBird(index)
-  }
-
-  render() {
-    const {BirdStore} = this.props
-
-    return (
-      <HashRouter>
-      <div className="App">
-        <h5 className="">
-          You have {BirdStore.birds.length} birds.
-        </h5>
-        <form onSubmit={e => this.handleSubmit(e)}>
-          <input type="text" ref={input => this.bird = input}/>
-          <button>
-            add bird
-          </button>
-        </form>
-
-      
-        <Route exact path='/about' component={About}/>
-        <Route path='/birds' component={Birds}/>
-      
-
-        <ul>
-          {BirdStore.birds.map((bird, index) => (
-            <li key={bird.time + index}>
-            {bird.name}
-            <button onClick={e => this.handleDel(index)}> del </button>
-            </li>
-          ))}
-        </ul>
-      </div>
-      </HashRouter>
-    );
-  }
-}
-
-export default App;
+export default App

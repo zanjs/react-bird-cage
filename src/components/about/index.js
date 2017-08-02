@@ -9,7 +9,7 @@ class About extends Component {
                     about
                 </div>
                 <div className="">
-                    <Link to="/birds">birds</Link>
+                    <Link to="/">birds</Link>
                 </div>
             </div>
         )

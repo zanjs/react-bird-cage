@@ -12,6 +12,13 @@ const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const getClientEnvironment = require('./env');
 const paths = require('./paths');
 
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+
+const extractScss = new ExtractTextPlugin({
+  filename: "[name].[contenthash].css",
+  disable: process.env.NODE_ENV === "development"
+});
+
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we always serve from the root. This makes config easier.
 const publicPath = '/';
@@ -139,6 +146,7 @@ module.exports = {
           /\.html$/,
           /\.(js|jsx)$/,
           /\.css$/,
+          /\.scss$/,
           /\.json$/,
           /\.bmp$/,
           /\.gif$/,
@@ -167,12 +175,39 @@ module.exports = {
         include: paths.appSrc,
         loader: require.resolve('babel-loader'),
         options: {
-          
           // This is a feature of `babel-loader` for webpack (not Babel itself).
           // It enables caching results in ./node_modules/.cache/babel-loader/
           // directory for faster rebuilds.
           cacheDirectory: true,
         },
+      },
+      // SCSS loader Local
+      {
+        test: /\.scss$/,
+        include: paths.scssModulesLocal,
+        use: extractScss.extract({
+          use: [{
+            loader: "css-loader?importLoader=1&modules&localIdentName=[path]_[name]_[local]_[hash:base64:5]"
+          }, {
+            loader: "sass-loader"
+          }],
+          // use style-loader in development
+          fallback: "style-loader"
+        })
+      },
+      // SCSS loader Global
+      {
+        test: /\.scss$/,
+        include: paths.scssModulesGlobal,
+        use: extractScss.extract({
+          use: [{
+            loader: "css-loader"
+          }, {
+            loader: "sass-loader"
+          }],
+          // use style-loader in development
+          fallback: "style-loader"
+        })
       },
       // "postcss" loader applies autoprefixer to our CSS.
       // "css" loader resolves paths in CSS and adds assets as dependencies.
@@ -187,6 +222,8 @@ module.exports = {
             loader: require.resolve('css-loader'),
             options: {
               importLoaders: 1,
+              modules: true, // Note. This prop enables CSS modules.
+              localIdentName: '[path]___[name]__[local]___[hash:base64:5]', // Add naming scheme
             },
           },
           {
@@ -216,6 +253,8 @@ module.exports = {
     ],
   },
   plugins: [
+    // SCSS plugin
+    extractScss,
     // Makes some environment variables available in index.html.
     // The public URL is available as %PUBLIC_URL% in index.html, e.g.:
     // <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">

@@ -4,6 +4,7 @@ const routePath = {
     birds: '/birds',
     count: '/count',
     histtory: '/history',
+    topics: '/topics',
 }
 
 

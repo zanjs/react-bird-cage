@@ -10,6 +10,7 @@ import Home from '../components/home'
 import Birds from '../components/birds'
 import Count from '../components/count'
 import HistoryView from '../components/history'
+import Topics from '../components/topics'
 // import NotFound from '../components/notFound'
 
 // Some folks find value in a centralized route config.
@@ -60,6 +61,10 @@ const routes = [
   {
     path: RoutePath.histtory,
     component: HistoryView
+  },
+  {
+    path: RoutePath.topics,
+    component: Topics
   },
   { path: '/tacos',
     component: Tacos,

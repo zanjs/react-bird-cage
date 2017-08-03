@@ -1,14 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import './scss/index.scss';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 
 import { Provider } from 'mobx-react'
-import BirdStore from './stores/BirdStore'
+import RootStore from './stores/Root'
+
 
 const Root = (
-    <Provider BirdStore={BirdStore} >
+    <Provider {...RootStore} >
         <App />
     </Provider>
 )

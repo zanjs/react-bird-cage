@@ -1,5 +1,6 @@
 const storeName = {
-    bird:'BirdStore'
+    bird:'BirdStore',
+    topics:'TopicsStore'
 }
 
 export default storeName

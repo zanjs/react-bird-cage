@@ -12,6 +12,7 @@ class TopicsStore {
             Print.log(response)
             this.topics = response.data.data
         }).catch(error => {
+            Print.err('topics store')
             Print.err(error)
         })
     }

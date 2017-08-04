@@ -3,17 +3,23 @@ import React from 'react'
 import {
   // BrowserRouter as Router,
   HashRouter,
-  Route,
-  Switch,
   NavLink
 } from 'react-router-dom'
+import queryString from 'query-string'
+// import { createLocation } from 'history'
 
-import {routes, RouteWithSubRoutes} from './routes/'
-import NotFound from './components/notFound'
 import RoutePath from './routes/path'
+import RouteComment from './routes'
+
 
 // const hashHistory = createHashHistory()
 // <HashRouter history={hashHistory}  >
+
+// const location = createLocation()
+
+const parsed = queryString.parse(window.location.search);
+console.log(window.location);
+console.log(parsed)
 
 const App = () => (
   <HashRouter >
@@ -25,14 +31,10 @@ const App = () => (
         <li><NavLink strict to={RoutePath.histtory} activeClassName="active">history</NavLink></li>
         <li><NavLink strict to={RoutePath.topics} activeClassName="active">topics</NavLink></li>
         <li><NavLink strict to="/tacos" activeClassName="active">Tacos</NavLink></li>
+        <li><NavLink strict to={RoutePath.lazyRoute} activeClassName="active">lazyRoute</NavLink></li>
         <li><NavLink strict to="/404" activeClassName="active">404</NavLink></li>
       </ul>
-      <Switch>
-      {routes.map((route, i) => (
-        <RouteWithSubRoutes key={i} {...route}/>
-      ))}
-      <Route component={NotFound}/>
-      </Switch>
+      <RouteComment />
     </div>
   </HashRouter>
 )

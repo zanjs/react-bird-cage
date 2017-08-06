@@ -16,6 +16,7 @@ class BirdStore {
   }
 
   @computed get count() {
+    console.log(this.birds.length)
     return this.birds.length
   }
 }

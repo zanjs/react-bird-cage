@@ -7,7 +7,7 @@ import RouteLazy from "route-lazy"
 
 // import Bundle from './bundle'
 import RoutePath from './path'
-import NotFound from '../components/notFound'
+import NotFound from '../pages/notFound'
 // import About from "../components/about'
 // import Home from "../components/home'
 // import Birds from "../components/birds'
@@ -98,7 +98,7 @@ class RouteComment extends Component {
               exact
               path={RoutePath.home}
               render={props => (
-                <RouteLazy {...props} component={import("../components/home")} />
+                <RouteLazy {...props} component={import("../pages/home")} />
               )}
             />
           <Route

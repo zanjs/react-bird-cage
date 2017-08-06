@@ -13,9 +13,13 @@ class Topics extends Component {
 
     render() {
         const topics = this.props[StoreName.topics].topics
+        const name = this.props[StoreName.topics].name
         return (
             <div>
                 <h5 className="">Topics</h5>
+                <h6 className="">
+                    {name}
+                </h6>
                 <div className="">
                     {topics.map((topic, index) => (
                         <article className="media" key={`topics-${index}`}>

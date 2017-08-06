@@ -95,7 +95,7 @@ module.exports = {
     // for React Native Web.
     extensions: ['.web.js', '.js', '.json', '.web.jsx', '.jsx'],
     alias: {
-      
+
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
       'react-native': 'react-native-web',
@@ -121,15 +121,13 @@ module.exports = {
       {
         test: /\.(js|jsx)$/,
         enforce: 'pre',
-        use: [
-          {
-            options: {
-              formatter: eslintFormatter,
-              
-            },
-            loader: require.resolve('eslint-loader'),
+        use: [{
+          options: {
+            formatter: eslintFormatter,
+
           },
-        ],
+          loader: require.resolve('eslint-loader'),
+        }, ],
         include: paths.appSrc,
       },
       // ** ADDING/UPDATING LOADERS **
@@ -181,16 +179,70 @@ module.exports = {
           cacheDirectory: true,
         },
       },
-      // SCSS loader Local
+      // SCSS loader Pages
+      {
+        test: /\.scss$/,
+        include: paths.scssModulesPages,
+        use: extractScss.extract({
+          use: [{
+              loader: "css-loader?importLoader=1&modules&localIdentName=[path]_[name]_[local]_[hash:base64:5]"
+            },
+            {
+              loader: require.resolve('postcss-loader'),
+              options: {
+                ident: 'postcss',
+                plugins: () => [
+                  require('postcss-flexbugs-fixes'),
+                  autoprefixer({
+                    browsers: [
+                      '>1%',
+                      'last 4 versions',
+                      'Firefox ESR',
+                      'not ie < 9', // React doesn't support IE8 anyway
+                    ],
+                    flexbox: 'no-2009',
+                  }),
+                ],
+              },
+            },
+            {
+              loader: "sass-loader"
+            }
+          ],
+          // use style-loader in development
+          fallback: "style-loader"
+        })
+      },
+      // SCSS loader Comments Local
       {
         test: /\.scss$/,
         include: paths.scssModulesLocal,
         use: extractScss.extract({
           use: [{
-            loader: "css-loader?importLoader=1&modules&localIdentName=[path]_[name]_[local]_[hash:base64:5]"
-          }, {
-            loader: "sass-loader"
-          }],
+              loader: "css-loader?importLoader=1&modules&localIdentName=[path]_[name]_[local]_[hash:base64:5]"
+            },
+            {
+              loader: require.resolve('postcss-loader'),
+              options: {
+                ident: 'postcss',
+                plugins: () => [
+                  require('postcss-flexbugs-fixes'),
+                  autoprefixer({
+                    browsers: [
+                      '>1%',
+                      'last 4 versions',
+                      'Firefox ESR',
+                      'not ie < 9', // React doesn't support IE8 anyway
+                    ],
+                    flexbox: 'no-2009',
+                  }),
+                ],
+              },
+            },
+            {
+              loader: "sass-loader"
+            }
+          ],
           // use style-loader in development
           fallback: "style-loader"
         })
@@ -201,10 +253,31 @@ module.exports = {
         include: paths.scssModulesGlobal,
         use: extractScss.extract({
           use: [{
-            loader: "css-loader"
-          }, {
-            loader: "sass-loader"
-          }],
+              loader: "css-loader"
+            },
+            {
+              loader: require.resolve('postcss-loader'),
+              options: {
+                // Necessary for external CSS imports to work
+                // https://github.com/facebookincubator/create-react-app/issues/2677
+                ident: 'postcss',
+                plugins: () => [
+                  require('postcss-flexbugs-fixes'),
+                  autoprefixer({
+                    browsers: [
+                      '>1%',
+                      'last 4 versions',
+                      'Firefox ESR',
+                      'not ie < 9', // React doesn't support IE8 anyway
+                    ],
+                    flexbox: 'no-2009',
+                  }),
+                ],
+              },
+            }, {
+              loader: "sass-loader"
+            }
+          ],
           // use style-loader in development
           fallback: "style-loader"
         })
